@@ -1,0 +1,32 @@
+# wsl-win-admin-bridge
+
+> Run elevated/administrator Windows commands from inside WSL2 (Linux) without a
+> per-call UAC prompt. Works via a pre-registered Windows Scheduled Task
+> (`WSL_ADMIN`) running at highest privilege: WSL writes a command to a shared
+> `.bat` file, triggers the task with `schtasks.exe /run`, and reads back the
+> captured output. UAC is approved once, at setup time only.
+
+Keywords: WSL, WSL2, Windows, administrator, elevation, UAC, sudo-for-windows,
+scheduled task, schtasks, usbipd, netsh, portproxy, firewall, Windows service,
+registry, PowerShell, privilege escalation, Linux-to-Windows, /mnt/c.
+
+## Docs
+
+- [README](README.md): Overview, how it works (with diagram), setup, usage, security notes.
+- [AGENTS.md](AGENTS.md): Machine-readable guide for AI agents — invocation, API contract, preconditions, safety.
+
+## Code
+
+- [win_admin.py](win_admin.py): The whole tool. CLI subcommands (`run`, `run-multi`, `powershell`, `status`, `test`) and an importable API (`admin_cmd`, `admin_cmd_no_output`, `run_powershell_admin`). Stdlib only.
+- [scripts/setup_task.ps1](scripts/setup_task.ps1): One-time scheduled-task registration (run as admin on Windows).
+- [scripts/setup_helper.bat](scripts/setup_helper.bat): Double-click wrapper that elevates and runs setup_task.ps1.
+
+## Quick start
+
+- Setup once (Windows admin): `schtasks /create /tn "WSL_ADMIN" /tr "C:\temp\wsl_admin_cmd.bat" /sc once /st 00:00 /rl highest /f`
+- From WSL: `python3 win_admin.py run "usbipd bind --busid 6-3 --force"`
+- Verify: `python3 win_admin.py test`
+
+## API contract
+
+Every call returns `(output_text: str, success: bool)`.
