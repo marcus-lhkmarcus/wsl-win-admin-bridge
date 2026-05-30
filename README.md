@@ -1,7 +1,13 @@
 # wsl-win-admin-bridge
 
+> **TL;DR** — a "sudo for Windows" bridge: run elevated/administrator Windows
+> commands from inside WSL2 (Linux) without a per-call UAC prompt.
+
 Run **elevated Windows commands from inside WSL2** — without an interactive admin
 PowerShell window and without a UAC prompt on every call.
+
+> 🤖 **AI agents:** see [AGENTS.md](AGENTS.md) for a machine-readable invocation
+> guide and [llms.txt](llms.txt) for a quick index.
 
 WSL2 can't elevate its way into Windows. If you want to run `usbipd bind`,
 `netsh portproxy`, restart a Windows service, or poke the registry from a Linux
@@ -128,6 +134,13 @@ Windows user with no further prompt. That's the whole point — but it means:
 - Only set this up on a machine you control.
 - Keep the scratch directory (`C:\temp` by default) writable only by your user.
 - Don't expose `win_admin.py` to untrusted callers.
+
+## Keywords
+
+WSL · WSL2 · Windows · administrator · elevation · UAC · sudo for Windows ·
+scheduled task · schtasks · usbipd · USB passthrough · netsh · portproxy ·
+firewall · Windows service control · registry · PowerShell · privilege escalation ·
+Linux-to-Windows automation · `/mnt/c`
 
 ## License
 
